@@ -361,12 +361,12 @@
 
   <script>
     // ============================================================
-    // 這裡請換成您的 Google Apps Script Web App URL
-    // 範例：https://script.google.com/macros/s/xxxxxxxxxxxxxxxx/exec
+    // 請把下面這行換成您的 Google Apps Script Web App URL
+    // 格式通常是：https://script.google.com/macros/s/xxxxxxx/exec
     // ============================================================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1c2mEH0x5IxEXwjNqeyX7X0JWsg4Gmzq1q4RWwKQawlFv7gnl9CxxL8GsNUEQ9PiA/exec";
 
-    const GROUPS = Array.from({ length: 13 }, (_, i) => `第${i + 1}組`);
+    const GROUPS = Array.from({ length: 12 }, (_, i) => `第${i + 1}組`);
 
     const QS = [
       "主題明確、內容正確",
@@ -556,6 +556,10 @@
 
       fetch(APPS_SCRIPT_URL, {
         method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain"
+        },
         body: JSON.stringify({
           rater: rater,
           target: target,
@@ -563,23 +567,15 @@
           comment: comment
         })
       })
-      .then(response => response.json())
-      .then(function(res) {
-        if (res && res.success) {
-          document.getElementById("done-title").textContent =
-            rater + " 對 " + target + " 評分完成！";
+      .then(function() {
+        document.getElementById("done-title").textContent =
+          rater + " 對 " + target + " 評分完成！";
 
-          document.getElementById("done-sub").textContent =
-            "總分 " + total + " / 80 分，感謝你的認真評分";
+        document.getElementById("done-sub").textContent =
+          "總分 " + total + " / 80 分，感謝你的認真評分";
 
-          document.getElementById("main").style.display = "none";
-          document.getElementById("done-view").style.display = "block";
-
-        } else {
-          showError(res && res.msg ? res.msg : "送出失敗，請再試一次。");
-          document.getElementById("sub-btn").disabled = false;
-          document.getElementById("sub-btn").textContent = "送出評分";
-        }
+        document.getElementById("main").style.display = "none";
+        document.getElementById("done-view").style.display = "block";
       })
       .catch(function(err) {
         showError("送出失敗：" + err.message);
@@ -592,6 +588,7 @@
       const el = document.getElementById("error-msg");
       el.textContent = msg;
       el.style.display = "block";
+
       window.scrollTo({
         top: 0,
         behavior: "smooth"
