@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>期末報告同儕互評</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+      background: #F5F7FA;
+      color: #1a1a1a;
+      padding-bottom: 40px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1A3A5C, #2E5C86);
+      color: #fff;
+      padding: 20px 20px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 13px;
+      opacity: .82;
+      margin-top: 5px;
+    }
+
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .info-card {
+      border-left: 6px solid #1A3A5C;
+      background: #F8FBFF;
+    }
+
+    .comment-card {
+      border-left: 6px solid #D9A441;
+      background: #FFFDF7;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1A3A5C;
+      margin-bottom: 12px;
+      letter-spacing: .04em;
+    }
+
+    .field label {
+      font-size: 13px;
+      color: #555;
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1.5px solid #D2DCE8;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+      color: #1a1a1a;
+    }
+
+    .field select:focus {
+      border-color: #1A3A5C;
+      outline: none;
+    }
+
+    .field + .field {
+      margin-top: 12px;
+    }
+
+    .sec-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #1A3A5C;
+      letter-spacing: .08em;
+      margin: 18px 0 8px 2px;
+    }
+
+    .q-card {
+      border-radius: 16px;
+      padding: 15px 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      border-left: 7px solid var(--accent);
+    }
+
+    .q-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 13px;
+      gap: 10px;
+    }
+
+    .q-name {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--accent);
+    }
+
+    .q-val {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--accent);
+      min-width: 38px;
+      text-align: right;
+    }
+
+    .bubbles {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .bubble {
+      width: 33px;
+      height: 33px;
+      border-radius: 50%;
+      border: 2px solid #D2DCE8;
+      background: #fff;
+      color: #7A8795;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bubble:hover {
+      background: #fff;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .bubble.on {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      transform: scale(1.08);
+      box-shadow: 0 3px 8px rgba(0,0,0,.15);
+    }
+
+    .total-bar {
+      background: linear-gradient(135deg, #EAF3FA, #F6FBFF);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 7px solid #1A3A5C;
+    }
+
+    .total-bar span {
+      font-size: 13px;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .total-bar strong {
+      font-size: 32px;
+      font-weight: 900;
+      color: #1A3A5C;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 12px;
+      border: 1.5px solid #D2DCE8;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    textarea:focus {
+      border-color: #D9A441;
+      outline: none;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #999;
+      margin-top: 6px;
+    }
+
+    .sub-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #1A3A5C, #2E5C86);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity .15s, transform .15s;
+    }
+
+    .sub-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .sub-btn:disabled {
+      opacity: .45;
+      cursor: default;
+      transform: none;
+    }
+
+    .notice {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-top: 9px;
+    }
+
+    .error-msg {
+      background: #FFF0F0;
+      color: #C0392B;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      display: none;
+      font-weight: 600;
+    }
+
+    .done {
+      text-align: center;
+      padding: 50px 20px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .done .icon {
+      font-size: 60px;
+      margin-bottom: 12px;
+    }
+
+    .done h2 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #1A3A5C;
+    }
+
+    .done p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .again-btn {
+      padding: 12px 28px;
+      border: 2px solid #1A3A5C;
+      border-radius: 12px;
+      background: transparent;
+      color: #1A3A5C;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>期末報告同儕互評</h1>
+    <p>運算思維與程式設計 ‧ 工業工程組</p>
+  </div>
+
+  <div class="container" id="main">
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <div class="card info-card">
+      <div class="card-title">評分資訊</div>
+
+      <div class="field">
+        <label>我是（評分者組別）</label>
+        <select id="rater">
+          <option value="">請選擇</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>評分對象（被評組別）</label>
+        <select id="target">
+          <option value="">請選擇</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="card comment-card">
+      <div class="card-title">其他開放留言</div>
+      <textarea id="comment" placeholder="可填寫該組的優點、建議或值得鼓勵的地方。"></textarea>
+      <div class="hint">此欄位可不填。</div>
+    </div>
+
+    <div class="total-bar">
+      <span>目前總分</span>
+      <div>
+        <strong id="total">0</strong>
+        <span style="font-size:14px;color:#999"> / 80</span>
+      </div>
+    </div>
+
+    <button class="sub-btn" id="sub-btn" disabled onclick="submitScore()">送出評分</button>
+    <div class="notice">不得評自己的組別，每組只能評一次</div>
+
+  </div>
+
+  <div class="container" id="done-view" style="display:none">
+    <div class="done">
+      <div class="icon">✅</div>
+      <h2 id="done-title">評分送出成功！</h2>
+      <p id="done-sub">感謝你的認真評分</p>
+      <button class="again-btn" onclick="resetForm()">繼續評下一組</button>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // 這裡請換成您的 Google Apps Script Web App URL
+    // 範例：https://script.google.com/macros/s/xxxxxxxxxxxxxxxx/exec
+    // ============================================================
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1c2mEH0x5IxEXwjNqeyX7X0JWsg4Gmzq1q4RWwKQawlFv7gnl9CxxL8GsNUEQ9PiA/exec";
+
+    const GROUPS = Array.from({ length: 13 }, (_, i) => `第${i + 1}組`);
+
+    const QS = [
+      "主題明確、內容正確",
+      "內容完整度與深度",
+      "口語表達清晰流暢",
+      "台風與聽眾互動",
+      "簡報設計與視覺效果",
+      "創新性與特色",
+      "分工均勻、成員參與度",
+      "整體流暢度與銜接"
+    ];
+
+    const Q_THEMES = [
+      { bg: "#EAF4FF", color: "#2E75B6" },
+      { bg: "#EEF8EA", color: "#38761D" },
+      { bg: "#FFF4E8", color: "#B45F06" },
+      { bg: "#F9ECF3", color: "#A64D79" },
+      { bg: "#EAF7F7", color: "#0F8B8D" },
+      { bg: "#F3EEFF", color: "#674EA7" },
+      { bg: "#FFF8E6", color: "#BF9000" },
+      { bg: "#FDEEEF", color: "#C0504D" }
+    ];
+
+    const SECTIONS = [
+      { title: "一、內容表現", items: [0, 1] },
+      { title: "二、表達能力", items: [2, 3] },
+      { title: "三、創意呈現", items: [4, 5] },
+      { title: "四、團隊合作", items: [6, 7] }
+    ];
+
+    const scores = {};
+
+    document.addEventListener("DOMContentLoaded", function () {
+      renderGroups();
+      renderQuestions();
+
+      document.getElementById("rater").addEventListener("change", function () {
+        checkSameGroup();
+        checkReady();
+      });
+
+      document.getElementById("target").addEventListener("change", function () {
+        checkSameGroup();
+        checkReady();
+      });
+    });
+
+    function renderGroups() {
+      const rater = document.getElementById("rater");
+      const target = document.getElementById("target");
+
+      GROUPS.forEach(group => {
+        const opt1 = document.createElement("option");
+        opt1.value = group;
+        opt1.textContent = group;
+        rater.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = group;
+        opt2.textContent = group;
+        target.appendChild(opt2);
+      });
+    }
+
+    function renderQuestions() {
+      const wrap = document.getElementById("questions");
+      let html = "";
+
+      SECTIONS.forEach(section => {
+        html += `<div class="sec-title">${section.title}</div>`;
+        section.items.forEach(idx => {
+          html += makeQCard(idx);
+        });
+      });
+
+      wrap.innerHTML = html;
+    }
+
+    function makeQCard(idx) {
+      const qNo = idx + 1;
+      const theme = Q_THEMES[idx];
+
+      const bubbles = Array.from({ length: 10 }, (_, i) => {
+        const score = i + 1;
+        return `
+          <button 
+            type="button" 
+            class="bubble" 
+            data-q="${qNo}" 
+            onclick="selectScore(${qNo}, ${score}, this)">
+            ${score}
+          </button>
+        `;
+      }).join("");
+
+      return `
+        <div class="q-card" style="background:${theme.bg}; --accent:${theme.color};">
+          <div class="q-top">
+            <span class="q-name">${qNo}. ${QS[idx]}</span>
+            <span class="q-val" id="val${qNo}">—</span>
+          </div>
+          <div class="bubbles">
+            ${bubbles}
+          </div>
+        </div>
+      `;
+    }
+
+    function checkSameGroup() {
+      const r = document.getElementById("rater").value;
+      const t = document.getElementById("target").value;
+
+      if (r && t && r === t) {
+        alert("不能評自己的組別！");
+        document.getElementById("target").value = "";
+      }
+    }
+
+    function selectScore(q, v, btn) {
+      scores[q] = v;
+
+      document.querySelectorAll('.bubble[data-q="' + q + '"]').forEach(b => {
+        b.classList.remove("on");
+      });
+
+      btn.classList.add("on");
+
+      document.getElementById("val" + q).textContent = v;
+
+      updateTotal();
+      checkReady();
+    }
+
+    function updateTotal() {
+      let total = 0;
+
+      for (let i = 1; i <= 8; i++) {
+        total += Number(scores[i] || 0);
+      }
+
+      document.getElementById("total").textContent = total;
+    }
+
+    function checkReady() {
+      const r = document.getElementById("rater").value;
+      const t = document.getElementById("target").value;
+
+      document.getElementById("sub-btn").disabled =
+        !(Object.keys(scores).length === 8 && r && t && r !== t);
+    }
+
+    function submitScore() {
+      const rater = document.getElementById("rater").value;
+      const target = document.getElementById("target").value;
+      const comment = document.getElementById("comment").value.trim();
+
+      const scoreArr = [];
+      for (let i = 1; i <= 8; i++) {
+        scoreArr.push(Number(scores[i] || 0));
+      }
+
+      if (!rater || !target) {
+        showError("請選擇評分者與被評組別。");
+        return;
+      }
+
+      if (rater === target) {
+        showError("不能評自己的組別。");
+        return;
+      }
+
+      if (scoreArr.some(s => !s)) {
+        showError("請完成 8 題評分。");
+        return;
+      }
+
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("請貼上")) {
+        showError("尚未設定 Apps Script Web App URL，請先修改 index.html 內的 APPS_SCRIPT_URL。");
+        return;
+      }
+
+      const total = scoreArr.reduce((a, b) => a + b, 0);
+
+      document.getElementById("sub-btn").disabled = true;
+      document.getElementById("sub-btn").textContent = "送出中…";
+      document.getElementById("error-msg").style.display = "none";
+
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          rater: rater,
+          target: target,
+          scores: scoreArr,
+          comment: comment
+        })
+      })
+      .then(response => response.json())
+      .then(function(res) {
+        if (res && res.success) {
+          document.getElementById("done-title").textContent =
+            rater + " 對 " + target + " 評分完成！";
+
+          document.getElementById("done-sub").textContent =
+            "總分 " + total + " / 80 分，感謝你的認真評分";
+
+          document.getElementById("main").style.display = "none";
+          document.getElementById("done-view").style.display = "block";
+
+        } else {
+          showError(res && res.msg ? res.msg : "送出失敗，請再試一次。");
+          document.getElementById("sub-btn").disabled = false;
+          document.getElementById("sub-btn").textContent = "送出評分";
+        }
+      })
+      .catch(function(err) {
+        showError("送出失敗：" + err.message);
+        document.getElementById("sub-btn").disabled = false;
+        document.getElementById("sub-btn").textContent = "送出評分";
+      });
+    }
+
+    function showError(msg) {
+      const el = document.getElementById("error-msg");
+      el.textContent = msg;
+      el.style.display = "block";
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function resetForm() {
+      document.getElementById("target").value = "";
+      document.getElementById("comment").value = "";
+
+      for (let i = 1; i <= 8; i++) {
+        delete scores[i];
+        document.getElementById("val" + i).textContent = "—";
+
+        document.querySelectorAll('.bubble[data-q="' + i + '"]').forEach(b => {
+          b.classList.remove("on");
+        });
+      }
+
+      document.getElementById("total").textContent = "0";
+      document.getElementById("sub-btn").disabled = true;
+      document.getElementById("sub-btn").textContent = "送出評分";
+      document.getElementById("error-msg").style.display = "none";
+
+      document.getElementById("main").style.display = "block";
+      document.getElementById("done-view").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
